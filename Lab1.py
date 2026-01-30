@@ -13,9 +13,9 @@ if "OPENAI_API_KEY" in st.secrets:
     openai_api_key = st.secrets["OPENAI_API_KEY"]
 else:
     st.error("Please add your OpenAI API key to the Streamlit secrets file.")
-    st.stop() # Stops execution if key is missing
+    st.stop() # In case no key
 
-# 2. Create the OpenAI client using the secret key
+# Create the OpenAI client using the secret key
 client = OpenAI(api_key=openai_api_key)
 
 # Let the user upload a file via `st.file_uploader`.
@@ -35,7 +35,7 @@ if uploaded_file:
 
     # Generate an answer using the OpenAI API.
     stream = client.chat.completions.create(
-        model="gpt-4o-mini", # Note: Lab requires choosing between models later [cite: 29]
+        model="gpt-4o-mini", 
         messages=messages,
         stream=True,
     )
