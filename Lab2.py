@@ -3,7 +3,7 @@ from openai import OpenAI
 
 # Update title
 st.title("Lab 2: Document Summarizer")
-# Get the key via Streamlit secrets
+# Get the key via secrets
 if "OPENAI_API_KEY" in st.secrets:
     client = OpenAI(api_key=st.secrets["OPENAI_API_KEY"])
 else:
@@ -35,7 +35,6 @@ if uploaded_file:
     document_content = uploaded_file.read().decode()
     
     # Create the prompt using instructions from the sidebar
-    # Note: The user no longer types in a question
     prompt = f"Summarize the following document in {language}. The summary should be: {summary_type}."
     
     messages = [
