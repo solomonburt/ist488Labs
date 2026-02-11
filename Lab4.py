@@ -34,7 +34,7 @@ def get_vector_db():
     # Check if empty
     if collection.count() == 0:
         # Define the path to your syllabus files
-        data_folder = "Lab-04-Data.zip" # zip file
+        data_folder = "Lab-04-Data" # folder not zip
         
         for filename in os.listdir(data_folder):
             if filename.endswith(".pdf"):
