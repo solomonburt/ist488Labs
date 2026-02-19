@@ -15,25 +15,26 @@ else:
 
 # define the weather data function
 def get_current_weather(location, api_key=weather_api_key, units='imperial'):
-    """Retrieves weather information based on a city name."""
+    # Check if the location is empty or just whitespace 
+    if not location or location.strip() == "":
+        location = "Syracuse, NY"
+    
     url = f"https://api.openweathermap.org/data/2.5/weather?q={location}&appid={api_key}&units={units}"
     
     response = requests.get(url)
     
+    # Handle errors
     if response.status_code == 401:
         raise Exception('Authentication failed: Invalid API key (401 Unauthorized)')
     if response.status_code == 404:
-        error_message = response.json().get('message')
-        raise Exception(f"404 error. {error_message}")
+        # more descriptive error
+        raise Exception(f"404 error. City '{location}' not found.")
         
     data = response.json()
     return {
         'location': location,
         'temperature': round(data['main']['temp'], 2),
         'feels_like': round(data['main']['feels_like'], 2),
-        'temp_min': round(data['main']['temp_min'], 2),
-        'temp_max': round(data['main']['temp_max'], 2),
-        'humidity': round(data['main']['humidity'], 2),
         'description': data['weather'][0]['description']
     }
 
