@@ -17,7 +17,7 @@ else:
 def get_current_weather(location, api_key=weather_api_key, units='imperial'):
     # Check if the location is empty or just whitespace 
     if not location or location.strip() == "":
-        location = "Syracuse, NY"
+        location = "Syracuse, NY, US"
     
     url = f"https://api.openweathermap.org/data/2.5/weather?q={location}&appid={api_key}&units={units}"
     
@@ -60,7 +60,7 @@ tools = [
 ]
 
 # streamlit UI
-target_city = st.text_input("Enter a city (e.g., Syracuse, NY, US):", placeholder="Syracuse, NY")
+target_city = st.text_input("Enter a city (e.g., Syracuse, NY, US):", placeholder="Syracuse, NY, US")
 
 if st.button("Get Advice"):
     # Handle default location if empty 
