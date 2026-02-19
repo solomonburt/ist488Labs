@@ -3,7 +3,7 @@ from openai import OpenAI
 import requests
 import json
 
-st.title("Lab 5: The Clothes by Weather Bot")
+st.title("Lab 5: The "What to Wear" Bot")
 
 # setup API Keys
 if "OPENAI_API_KEY" in st.secrets and "OPENWEATHER_API_KEY" in st.secrets:
