@@ -66,10 +66,10 @@ if st.button("Get Advice"):
     # Handle default location if empty 
     query_location = target_city if target_city.strip() != "" else "Syracuse, NY"
 
-messages = [
-    {"role": "system", "content": "You are a clothing advisor. Use the weather tool for the provided location. If no location is specified, use 'Syracuse, NY'."},
-    {"role": "user", "content": f"I am in {query_location}. What should I wear?"}
-]
+    messages = [
+        {"role": "system", "content": "You are a clothing advisor. Use the weather tool for the provided location. If no location is specified, use 'Syracuse, NY'."},
+        {"role": "user", "content": f"I am in {query_location}. What should I wear?"}
+    ]
 
     # Determine if tool is needed
     response = client.chat.completions.create(
