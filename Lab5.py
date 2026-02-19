@@ -65,11 +65,11 @@ target_city = st.text_input("Enter a city (e.g., Syracuse, NY, US):", placeholde
 if st.button("Get Advice"):
     # Handle default location if empty 
     query_location = target_city if target_city.strip() != "" else "Syracuse, NY"
-    st.info(f"Gathering weather data for: {query_location}")
-    messages = [
-        {"role": "system", "content": "You are a helpful assistant that provides clothing and activity advice based on weather data."},
-        {"role": "user", "content": f"What should I wear in {query_location} today?"}
-    ]
+
+messages = [
+    {"role": "system", "content": "You are a clothing advisor. Use the weather tool for the provided location. If no location is specified, use 'Syracuse, NY'."},
+    {"role": "user", "content": f"I am in {query_location}. What should I wear?"}
+]
 
     # Determine if tool is needed
     response = client.chat.completions.create(
