@@ -3,7 +3,7 @@ from openai import OpenAI
 import requests
 import json
 
-st.title("☁️ Lab 5: The 'What to Wear' Bot")
+st.title("Lab 5: The Clothes by Weather Bot")
 
 # setup API Keys
 if "OPENAI_API_KEY" in st.secrets and "OPENWEATHER_API_KEY" in st.secrets:
@@ -67,7 +67,7 @@ if st.button("Get Advice"):
     query_location = target_city if target_city.strip() != "" else "Syracuse, NY, US"
 
     messages = [
-        {"role": "system", "content": "You are a clothing advisor. Use the weather tool for the provided location. If no location is specified, use 'Syracuse, NY, US'."},
+        {"role": "system", "content": "You are a clothing advisor. Always use the weather tool. When calling the tool, always format the location as 'City, State, Country' if possible (e.g., 'Syracuse, NY, US'). If no location is specified, use 'Syracuse, NY, US'."},
         {"role": "user", "content": f"I am in {query_location}. What should I wear?"}
     ]
 
@@ -85,32 +85,38 @@ if st.button("Get Advice"):
     # Determine if LLM wants to use the tool 
     if tool_calls:
         for tool_call in tool_calls:
+            # Parse arguments LLM generated
             function_args = json.loads(tool_call.function.arguments)
-            
-            # Call the local weather function 
-            try:
-                weather_data = get_current_weather(function_args.get("location"))
-                
-                # 7. Second LLM Call: Provide weather data for advice 
-                messages.append(response_message)
-                messages.append({
-                    "role": "tool",
-                    "tool_call_id": tool_call.id,
-                    "name": "get_current_weather",
-                    "content": json.dumps(weather_data),
-                })
-                
-                final_response = client.chat.completions.create(
-                    model="gpt-4o-mini",
-                    messages=messages,
-                )
-                
-                # Display output
-                st.subheader(f"Weather for {weather_data['location']}")
-                st.write(f"**Temp:** {weather_data['temperature']}°F | **Feels Like:** {weather_data['feels_like']}°F")
-                st.write(f"**Conditions:** {weather_data['description']}")
-                st.divider()
-                st.markdown(final_response.choices[0].message.content)
-                
-            except Exception as e:
-                st.error(f"Error fetching weather: {e}")
+            extracted_location = function_args.get("location")
+        
+            # Add a status box to see progress
+            with st.status(f"Searching weather for: {extracted_location}...", expanded=True) as status:
+                try:
+                    # call the local weather function 
+                    weather_data = get_current_weather(extracted_location)
+                    status.update(label="Weather data found!", state="complete")
+                    
+                    # Provide weather data for advice 
+                    messages.append(response_message)
+                    messages.append({
+                        "role": "tool",
+                        "tool_call_id": tool_call.id,
+                        "name": "get_current_weather",
+                        "content": json.dumps(weather_data),
+                    })
+                    
+                    final_response = client.chat.completions.create(
+                        model="gpt-4o-mini",
+                        messages=messages,
+                    )
+                    
+                    # Display output
+                    st.subheader(f"Weather for {weather_data['location']}")
+                    st.write(f"**Temp:** {weather_data['temperature']}°F | **Conditions:** {weather_data['description']}")
+                    st.divider()
+                    st.markdown(final_response.choices[0].message.content)
+                    
+                except Exception as e:
+                    # This will tell you EXACTLY which city name caused the 404
+                    status.update(label="Error retrieving data", state="error")
+                    st.error(f"The bot tried to search for '{extracted_location}' but failed: {e}")
