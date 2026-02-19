@@ -64,10 +64,10 @@ target_city = st.text_input("Enter a city (e.g., Syracuse, NY, US):", placeholde
 
 if st.button("Get Advice"):
     # Handle default location if empty 
-    query_location = target_city if target_city.strip() != "" else "Syracuse, NY"
+    query_location = target_city if target_city.strip() != "" else "Syracuse, NY, US"
 
     messages = [
-        {"role": "system", "content": "You are a clothing advisor. Use the weather tool for the provided location. If no location is specified, use 'Syracuse, NY'."},
+        {"role": "system", "content": "You are a clothing advisor. Use the weather tool for the provided location. If no location is specified, use 'Syracuse, NY, US'."},
         {"role": "user", "content": f"I am in {query_location}. What should I wear?"}
     ]
 
