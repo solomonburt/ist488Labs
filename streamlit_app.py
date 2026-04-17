@@ -6,8 +6,9 @@ lab2 = st.Page("Lab2.py", title="Lab 2")
 lab3 = st.Page("Lab3.py", title="Lab 3")
 lab4 = st.Page("Lab4.py", title="Lab 4")
 lab5 = st.Page("Lab5.py", title="Lab 5")
-lab6 = st.Page("Lab6.py", title="Lab 6", default=True)
+lab6 = st.Page("Lab6.py", title="Lab 6")
+lab9 = st.Page("Lab9.py", title="Lab 9", default=True)
 # Create navigation
-pg = st.navigation([lab1, lab2, lab3, lab4, lab5, lab6])
+pg = st.navigation([lab1, lab2, lab3, lab4, lab5, lab6, lab9])
 pg.run()
 
